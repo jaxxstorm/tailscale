@@ -59,6 +59,13 @@ type StatefulSet struct {
 	// https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/#syntax-and-character-set
 	// +optional
 	Annotations map[string]string `json:"annotations,omitempty"`
+	// Env vars that will be added to the StatefulSet created for the proxy.
+	// Any Env vars specified here will be merged with the default Env vars
+	// applied to the StatefulSet by the Tailscale Kubernetes operator as
+	// well as any other Env vars that might have been applied by other
+	// actors.
+	// +optional
+	Env []corev1.EnvVar `json:"env,omitempty"`
 	// Configuration for the proxy Pod.
 	// +optional
 	Pod *Pod `json:"pod,omitempty"`

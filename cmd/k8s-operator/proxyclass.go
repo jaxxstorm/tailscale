@@ -87,6 +87,13 @@ func (a *ProxyClassReconciler) validate(pc *tsapi.ProxyClass) (violations field.
 				violations = append(violations, errs...)
 			}
 		}
+		if len(sts.Env) > 0 {
+			for i, env := range sts.Env {
+				if errs := apivalidation.ValidateEnvVar(&env, field.NewPath(fmt.Sprintf(".spec.statefulSet.env[%d]", i))); errs != nil {
+					violations = append(violations, errs...)
+				}
+			}
+		}
 		if pod := sts.Pod; pod != nil {
 			if len(pod.Labels) > 0 {
 				if errs := metavalidation.ValidateLabels(pod.Labels, field.NewPath(".spec.statefulSet.pod.labels")); errs != nil {

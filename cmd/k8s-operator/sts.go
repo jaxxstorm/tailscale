@@ -127,6 +127,8 @@ type tailscaleSTSConfig struct {
 	Connector *connector
 
 	ProxyClass string
+
+	Env []corev1.EnvVar
 }
 
 type connector struct {
@@ -455,6 +457,8 @@ func (a *tailscaleSTSReconciler) reconcileSTS(ctx context.Context, logger *zap.S
 	}
 	pod := &ss.Spec.Template
 	container := &pod.Spec.Containers[0]
+
+	container.Env = append(container.Env, sts.Env...)
 	proxyClass := new(tsapi.ProxyClass)
 	if sts.ProxyClass != "" {
 		if err := a.Get(ctx, types.NamespacedName{Name: sts.ProxyClass}, proxyClass); err != nil {
